@@ -48,8 +48,11 @@ public class Calculator {
      iterate through the vector, character by character by character
      if the current character is operator then call the performOperator method and pass the operator
      else the current character must be an operand so call performNumber method and pass the operand
-     then remove 
-     while something is left in the vector, ei
+     then remove current processed character from the vector, which is always the first element in the vector
+     keep repeating above step while something is left in the vector
+
+     TODO: explain use of operator method, which only checks if the current character is an operator or no
+
      */
     public static double calculate (Vector<String> inputLine) {
 	while ( inputLine.size() >= 1 )	{
@@ -59,7 +62,8 @@ public class Calculator {
 			performNumber(inputLine.firstElement());
 
 		inputLine.removeElementAt(0);
-	}
+    }
+    // what this part does ?
 	while ( !  operatorStack.empty() )	{
 		if ( numberStack.size() > 1 )
 			evaluate();
@@ -88,6 +92,12 @@ public class Calculator {
 
     /** perform the required operation based on precedence on the stack
      */
+
+     /*
+     checks for the operator precedence based on the index of operator in the operators string 
+     if the operatorStack is empty or precedence of the current operator is greater than the top operator on the stack then simply push the current operator to the operan stack
+     else while operator stack is not empty and current operator's precedence is less than the precedenc of the stack top operator then call evaluate method
+      */
     public static void performOperator (String op) {
 		while (! operatorStack.empty()  &&
 			(  precedence(op) < precedence(operatorStack.peek() ) )
@@ -98,6 +108,9 @@ public class Calculator {
 
     /** pushes the number on the number stack
      */
+    /*
+    Number stack is populated by the performNumber and operatorStack is populated by performOperator method
+    */
     public static void performNumber (String number) {
 		numberStack.push(Double.valueOf(number));
     }
