@@ -18,17 +18,17 @@ keep repeating 1 and 2 while something is there to process in the input vector
 Once the expression is processed and two stacks i.e. number stack and operator stack are filled with numbers and operators respectively
 To begin or continue evaluating the expression, there must atleast one operator on the opeartor stack and two numbers on the number stack
 if both the above condition are true then a call is made to evaluate method,  else a print statement is made to signal dangling operand and program stops execution
-Evaluate Method: 
+Evaluate Method:
 	evaluate is the method where both the data stores, operand stack and number stack are used to carry out the calculation
 	it gets the operand from the stack, gets two numbers from number stack, based on current operator decides using if, else if cases
-	which mathematical operation to perform, for exponential operator programs uses Math class. The result generated after doing the operation, is again pushed on the number stack	
+	which mathematical operation to perform, for exponential operator programs uses Math class. The result generated after doing the operation, is again pushed on the number stack
 As evaluate method only, calculates the result and pushes it on the number stack, after all evaluation is done the only number on the numberstack is the final result of the expression
 
 Other Helper Functions: PerformOperator
 checks for the operator precedence based on the index of operator in the operators string
-if the operatorStack is empty or precedence of the current operator is greater than the top operator on the stack 
+if the operatorStack is empty or precedence of the current operator is greater than the top operator on the stack
 	then simply push the current operator to the operand stack
-else while operator stack is not empty and current operator's precedence is less than the precedence of the stack top operator 
+else while operator stack is not empty and current operator's precedence is less than the precedence of the stack top operator
 	then call evaluate method
 Number stack is populated by the performNumber and operatorStack is populated by performOperator method
 */
@@ -44,6 +44,7 @@ public class Calculator {
     public static void main (String args []) {
         performCalculation("2", "+", "3");
         performCalculation("2", "+", "3", "*", "3");
+        performCalculation("2", "+", "3", "*", "4", "+", "5");
         performCalculation("2", "*", "3", "+", "3");
         performCalculation("2", "+", "3", "^", "4");
         performCalculation("2", "^", "3", "+", "4");
@@ -104,7 +105,7 @@ public class Calculator {
 
     public static void performOperator (String op) {
         while (! operatorStack.empty()  &&
-                (  precedence(op) < precedence(operatorStack.peek() ) )
+                (  precedence(op) > precedence(operatorStack.peek() ) )
         )
             evaluate();
         operatorStack.push(op);
