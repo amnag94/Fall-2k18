@@ -1,92 +1,98 @@
 
-# each character cannot be more than 50 characters long 
+# each character cannot be more than 50 characters long
 # space is of 10 units
-def drawA():
-    #Pre: Pos (0,0), Head East, UP
-    #Post: Pos (0,0), Head East, UP
-    noteStartPosition()
+import math
+import turtle
+
+
+def draw_a():
+    # Pre: Pos (0,0), Head East, UP
+    # Post: Pos (0,0), Head East, UP
+    note_start_position()
     my_turtle.down()
     my_turtle.left(90)
     my_turtle.fd(Height)
     my_turtle.right(90)
     my_turtle.fd(Width)
     my_turtle.right(90)
-    drawLine(my_turtle,Height)
+    draw_line(Height)
     my_turtle.down()
     my_turtle.fd(Height/2)
     my_turtle.right(90)
     my_turtle.fd(Width)
     my_turtle.up()
-    goToStartPosition()
+    go_to_start_position()
 
-def drawE():
-    #Pre: Pos (0,0), Head East, UP
-    #Post: Pos (0,0), Head East, UP
-    noteStartPosition()
-    drawLine(my_turtle,Width)
+
+def draw_e():
+    # Pre: Pos (0,0), Head East, UP
+    # Post: Pos (0,0), Head East, UP
+    note_start_position()
+    draw_line(Width)
     my_turtle.left(90)
-    drawLine(my_turtle,Height)
+    draw_line(Height)
     my_turtle.fd(Height/2)
     my_turtle.right(90)
-    drawLine(my_turtle,Width)
+    draw_line(Width)
     my_turtle.left(90)
     my_turtle.fd(Height/2)
     my_turtle.right(90)
-    drawLine(my_turtle,Width)
+    draw_line(Width)
     my_turtle.up()
-    goToStartPosition()
+    go_to_start_position()
 
-    
-def drawT():
-    #Pre: Pos (0,0), Head East, UP
-    #Post: Pos (0,0), Head East, UP
-    noteStartPosition()
+
+def draw_t():
+    # Pre: Pos (0,0), Head East, UP
+    # Post: Pos (0,0), Head East, UP
+    note_start_position()
     my_turtle.left(90)
     my_turtle.fd(Height)
     my_turtle.right(90)
-    drawLine(my_turtle,Width)
+    draw_line(Width)
     my_turtle.fd(Width/2)
     my_turtle.right(90)
     my_turtle.down()
     my_turtle.fd(Height)
     my_turtle.up()
-    goToStartPosition()
+    go_to_start_position()
 
-def drawK():
-    #
-    #Pre: Pos (0,0), Head East, UP
-    #Post: Pos (0,0), Head East, UP
-    noteStartPosition()
+
+def draw_k():
+    # Pre: Pos (0,0), Head East, UP
+    # Post: Pos (0,0), Head East, UP
+    note_start_position()
     half_of_height = Height/2
     my_turtle.left(90)
-    drawLine(my_turtle,Height)
+    draw_line(Height)
     my_turtle.fd(half_of_height)
     my_turtle.right(45)
-    drawLine(my_turtle,half_of_height*math.sqrt(2))
+    draw_line(half_of_height * math.sqrt(2))
     my_turtle.right(90)
-    drawLine(my_turtle,half_of_height*math.sqrt(2))
+    draw_line(half_of_height * math.sqrt(2))
     my_turtle.up()
-    goToStartPosition()
+    go_to_start_position()
 
 
 def space():
-    #Pre: Pos (0,0), Head East, UP
-    #Post: Pos (0,0), Head East, UP
-    my_turtle.fd(60)
+    # Pre: Pos (0,0), Head East, UP
+    # Post: Pos (0,0), Head East, UP
+    my_turtle.fd(Width+10)
 
-def drawLine(my_turtle,len):
-    #Pre: Pos (0,0), Heading Unknown, UP
-    #Post: Pos (0,0),Same Heading as Pre , UP
+
+def draw_line(length):
+    # Pre: Pos (0,0), Heading Unknown, UP
+    # Post: Pos (0,0),Same Heading as Pre , UP
     my_turtle.down()
-    my_turtle.fd(len)
-    my_turtle.bk(len)
+    my_turtle.fd(length)
+    my_turtle.bk(length)
     my_turtle.up()
 
 
-def drawN():
-    #Pre: Pos (0,0), Head East, UP
-    #Post: Pos (0,0), Head East, UP
-    noteStartPosition()
+def draw_n():
+    # Pre: Pos (0,0), Head East, UP
+    # Post: Pos (0,0), Head East, UP
+    note_start_position()
     my_turtle.down()
     my_turtle.left(90)
     my_turtle.fd(Height)
@@ -100,12 +106,13 @@ def drawN():
     my_turtle.right(150)
     my_turtle.goto(pos)
     my_turtle.up()
-    goToStartPosition()
+    go_to_start_position()
 
-def drawO():
-    #pre
-    #pos
-    noteStartPosition()
+
+def draw_o():
+    # Pre: Pos (0,0), Head East, UP
+    # Post: Pos (0,0), Head East, UP
+    note_start_position()
     my_turtle.down()
     my_turtle.fd(Width)
     my_turtle.left(90)
@@ -114,60 +121,50 @@ def drawO():
     my_turtle.fd(Width)
     my_turtle.left(90)
     my_turtle.fd(Height)
-    goToStartPosition()
+    go_to_start_position()
 
 
-def goToStartPosition():
+def go_to_start_position():
     my_turtle.up()
     my_turtle.goto(start_pos)
     my_turtle.setheading(0)
 
 
-def noteStartPosition():
-    global start_pos 
+def note_start_position():
+    global start_pos
     start_pos = my_turtle.position()
 
 
-
-import turtle
-import math
-
-start_pos = (0,0)
-
+start_pos = (0, 0)
 my_turtle = turtle.Turtle()
 my_turtle.up()
-my_turtle.setposition(-300,100)
+my_turtle.setposition(-300, 100)
 Height = 100
 Width = 50
 
 
-drawK()
+draw_k()
 space()
-drawE()
+draw_e()
 space()
-drawT()
+draw_t()
 space()
-drawA()
+draw_a()
 space()
-drawN()
+draw_n()
 
-my_turtle.setposition(-300,-100)
+my_turtle.setposition(-300, -100)
 
-drawK()
+draw_k()
 space()
-drawO()
+draw_o()
 space()
-drawK()
+draw_k()
 space()
-drawA()
+draw_a()
 space()
-drawN()
+draw_n()
 space()
-drawE()
+draw_e()
 space()
-
 turtle.done()
-
-
-
-
