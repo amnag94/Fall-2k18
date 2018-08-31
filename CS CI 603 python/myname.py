@@ -1,9 +1,11 @@
+# Every function is worked out by Pre Post Condition
+# @author : Ketan Balbhim Kokane
 
-# each character cannot be more than 50 characters long
-# space is of 10 units
+
 import math
 import turtle
 
+# A Reusable function to draw A, no points are hard coded
 
 def draw_a():
     # Pre: Pos (0,0), Head East, UP
@@ -80,6 +82,7 @@ def space():
     my_turtle.fd(Width+10)
 
 
+# Function to draw a line and come back to the start position, to remove duplicated block of code
 def draw_line(length):
     # Pre: Pos (0,0), Heading Unknown, UP
     # Post: Pos (0,0),Same Heading as Pre , UP
@@ -124,6 +127,8 @@ def draw_o():
     go_to_start_position()
 
 
+# instead of every character having to figure out how to go back to the initial position, used a generic function which stores the initial position
+# of the turtle before starting to draw anything and once the character is draw simply returns to the start position, using goto function 
 def go_to_start_position():
     my_turtle.up()
     my_turtle.goto(start_pos)
@@ -134,6 +139,33 @@ def note_start_position():
     global start_pos
     start_pos = my_turtle.position()
 
+def draw_first_name():
+    draw_k()
+    space()
+    draw_e()
+    space()
+    draw_t()
+    space()
+    draw_a()
+    space()
+    draw_n()
+
+
+
+def draw_last_name():
+    draw_k()
+    space()
+    draw_o()
+    space()
+    draw_k()
+    space()
+    draw_a()
+    space()
+    draw_n()
+    space()
+    draw_e()
+    space()
+
 
 start_pos = (0, 0)
 my_turtle = turtle.Turtle()
@@ -142,29 +174,7 @@ my_turtle.setposition(-300, 100)
 Height = 100
 Width = 50
 
-
-draw_k()
-space()
-draw_e()
-space()
-draw_t()
-space()
-draw_a()
-space()
-draw_n()
-
+draw_first_name()
 my_turtle.setposition(-300, -100)
-
-draw_k()
-space()
-draw_o()
-space()
-draw_k()
-space()
-draw_a()
-space()
-draw_n()
-space()
-draw_e()
-space()
+draw_last_name()
 turtle.done()
