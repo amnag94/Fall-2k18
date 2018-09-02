@@ -7,3 +7,6 @@
 *.vscode
 
 *.zip
+
+login.command
+sftp.command
