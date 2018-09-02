@@ -1,34 +1,27 @@
+/**
+ * Prime.java
+ * 
+ * Version :
+ *          1
+ * Revisions : 
+ *          1
+ */
 
 
-class Prime {
+ /**
+  * This program Finds the sum of the prime factors of a given number 
+  *
+  * @author Ketan Balbhim Kokane
+  * @author Ameya Deepak Nagnur
+  */
 
-    public static int[] primeNumbersUptoN = new int[4];
-    public static int[] result = new int[5];
-    public static boolean isPrime(int n) {
+public class Prime {
 
-        for (int index = 2; index < n; index++) {
-            if (n % index == 0)
-                return false;
-        }
-        return true;
-    }
-
-    public static void printResult(int[] result, int index){
-        System.out.print("The sum of all primes for "+ index+ ": "+result[0] + "  (");
-        for (int i = 1; i < result.length; i++) {
-            
-            if(result[i]!=0)
-            {
-                if(i > 1)
-                    System.out.print(" + ");
-                System.out.print(result[i]);
-            }
-                
-            
-        }
-        System.out.print(")");
-        System.out.println();
-    }
+    /**
+     * The main Program 
+     * 
+     * @params  args     command Line arguments(ignored) 
+     */
 
     public static void main(String args[]) {
         int internalArrayIndex = 0;
@@ -66,4 +59,33 @@ class Prime {
 
 
     }
+
+    public static int[] primeNumbersUptoN = new int[4];
+    public static int[] result = new int[5];
+    public static boolean isPrime(int n) {
+
+        for (int index = 2; index < n; index++) {
+            if (n % index == 0)
+                return false;
+        }
+        return true;
+    }
+
+    public static void printResult(int[] result, int index){
+        System.out.print("The sum of all primes for "+ index+ ": "+result[0] + "  (");
+        for (int i = 1; i < result.length; i++) {
+            
+            if(result[i]!=0)
+            {
+                if(i > 1)
+                    System.out.print(" + ");
+                System.out.print(result[i]);
+            }
+                
+            
+        }
+        System.out.print(")");
+        System.out.println();
+    }
+
 }

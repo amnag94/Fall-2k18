@@ -1,5 +1,21 @@
+/**
+ * Calculator.java
+ * 
+ * Version :
+ *          1
+ * Revisions : 
+ *          1
+ */
+
+
 import java.util.Vector;
 import java.util.Stack;
+ /**
+  * This program evaluates the a given mathematical infix expression 
+  *
+  * @author Ketan Balbhim Kokane
+  * @author Ameya Deepak Nagnur
+  */
 
 /*
 Program uses 3 main data stores
