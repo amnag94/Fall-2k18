@@ -54,7 +54,7 @@ Number stack is populated by the performNumber and operatorStack is populated by
 public class Calculator {
 
     // See https://docs.oracle.com/javase/10/docs/api/java/util/Stack.html
-    static Stack<Integer> numberStack = new Stack<Integer>();
+    static Stack<Double> numberStack = new Stack<Double>();
     static Stack<String> operatorStack = new Stack<String>();
     // See https://docs.oracle.com/javase/10/docs/api/java/lang/String.html
     static String operators =  "+-%*/^" ;
@@ -80,7 +80,7 @@ public class Calculator {
 
         while(indexOfOpeningParan > -1){
             int indexOfClosingParan = aLine.indexOf(")");
-            int result = calculate(new Vector<>(aLine.subList(indexOfOpeningParan+1,indexOfClosingParan)));
+            Double result = calculate(new Vector<>(aLine.subList(indexOfOpeningParan+1,indexOfClosingParan)));
             String temp = String.valueOf(result);
             aLine.setElementAt(temp,indexOfOpeningParan);
             for (int index = indexOfOpeningParan+1;index<= indexOfClosingParan;index++){
@@ -89,6 +89,10 @@ public class Calculator {
             aLine.removeAll(Collections.singleton("$"));
             indexOfOpeningParan = aLine.lastIndexOf("(");
         }
+        if (aLine.size() > 0){
+            System.out.println("= " + calculate(aLine));
+        }
+
     }
 
     private static Vector<String> createInputVector(String ... valuesAndOperators) {
@@ -108,18 +112,11 @@ public class Calculator {
         return aLine;
     }
 
-    private static String ReplaceBracketsWithParanthesis(String input) {
-        input = input.replace("{","(");
-        input = input.replace("[","(");
-        input = input.replace("}",")");
-        input = input.replace("]",")");
-        return input;
-    }
 
     /** drives the calculation and returns the result
      */
 
-    public static int calculate (Vector<String> inputLine) {
+    public static Double calculate (Vector<String> inputLine) {
         while ( inputLine.size() >= 1 )	{
             if ( operator( inputLine.firstElement() )	)
                 performOperator(inputLine.firstElement());
@@ -171,12 +168,12 @@ public class Calculator {
     /** pushes the number on the number stack
      */
     public static void performNumber (String number) {
-        numberStack.push(Integer.valueOf(number));
+        numberStack.push(Double.valueOf(number));
     }
 
     /** get the number of the stack, if a number is available, else RIP
      */
-    public static int  getNumber () {
+    public static Double  getNumber () {
         if ( numberStack.empty() ){
             System.out.println("not enough numbers ...");
             System.exit(2);
@@ -188,8 +185,8 @@ public class Calculator {
      */
     public static void evaluate () {
         String currentOp = operatorStack.pop();
-        int right = getNumber();
-        int left = getNumber();
+        Double right = getNumber();
+        Double left = getNumber();
         if ( currentOp.equals("+") )
             numberStack.push( left + right );
         else if ( currentOp.equals("-") )
@@ -200,9 +197,9 @@ public class Calculator {
             numberStack.push( left % right );
         else if ( currentOp.equals("/") )
             numberStack.push( left / right );
-        //else if ( currentOp.equals("^") )
-        //    numberStack.push((Math.pow(left , right)));
+        else if ( currentOp.equals("^") )
+            numberStack.push(Math.pow(left , right));
         else
-            System.out.println("Unknow Operator");
+            System.out.println("Unknown Operator");
     }
 }
