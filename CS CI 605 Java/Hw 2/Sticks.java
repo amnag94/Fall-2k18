@@ -2,9 +2,9 @@
  * Sticks.java
  * 
  * Version :
- *          2.0
+ *          2.1
  * Revisions : 
- *          1.0
+ *          1.1
  */
 
 
@@ -21,6 +21,8 @@ public class Sticks
 {
     // Fixed values to compare with returned result of recursive function
     public static int LengthFound = 0, LengthNotFound = -1;
+    // Counter for no. of used stick lengths at that moment
+    public static int usedSticksCount = 0;
     // Flag for atleast one combination found
     public static int combinationFound = 0;
     // Variable for smallest length amongst all combinations
@@ -28,7 +30,7 @@ public class Sticks
     // Array of known sticks to be used
     public static int knownSticks [] = { 1, 2, 3, 5, 8 };
     // Array of stick lengths to be formed using knownSticks
-    public static int [] unknownStickLengths = { 1, 5, 6, 7, 8, 9, 3 };
+    public static int [] unknownStickLengths = { 1, 5, 6, 7, 8, 9 };
     // Final used status array
     public static int [] finalUsedArray = new int[knownSticks.length];
     // Variable to store sum of all known stick lengths
@@ -58,8 +60,10 @@ public class Sticks
             //Set to highest possible to avoid comparison issues
             minCombLength = knownSticks.length;
 
-            //If function returns result as -1, no combination works and hence display No
             combinationFound = 0;
+            usedSticksCount = 0;
+
+            //If function returns result as -1, no combination works and hence display No
             if(findStickLengthFromKnowSticks(knownSticks, unknownLength, new int [knownSticks.length]) == LengthNotFound)
             {
                 System.out.println(unknownLength + " inch:\t No;");
@@ -149,8 +153,19 @@ public class Sticks
             if(stickLengthToMatch > knownSticks[index] && usedSticks[index]!=1) {
                 remainingStickLength = stickLengthToMatch - knownSticks[index];
                 usedSticks[index] = 1;
-                // Recursive call to the function
-                stickLengthFound = findStickLengthFromKnowSticks(knownSticks,remainingStickLength,usedSticks);
+                usedSticksCount++;
+
+                /**
+                 *
+                 * If the number of stick lengths used is equal to minimum length found so far then
+                 * calling the function again is avoided since even if we find a combination, it's
+                 * length will be more than current minimum
+                 *
+                 */
+                if(usedSticksCount < minCombLength) {
+                    // Recursive call to the function
+                    stickLengthFound = findStickLengthFromKnowSticks(knownSticks, remainingStickLength, usedSticks);
+                }
 
                 /**
                  *
@@ -163,11 +178,13 @@ public class Sticks
                 // Set current stick length to unused whether it gave a combination or not
                 // and continue to next iteration of the loop to try next stick length and find a combination
                 usedSticks[index]= 0;
+                usedSticksCount--;
                 continue;
 
             }
             else if(stickLengthToMatch == knownSticks[index]  && usedSticks[index]!=1) {//the current stick can be used to exactly make up the remaining stick length
                 usedSticks[index]=1;// Since we have used this stick length
+                usedSticksCount++;
 
                 int lengthOfCombination = 0;// Counter for the length of the combination
                 for(int usedSticksIndex = 0; usedSticksIndex < usedSticks.length; usedSticksIndex++) {
@@ -188,6 +205,7 @@ public class Sticks
                 }
 
                 usedSticks[index] = 0;
+                usedSticksCount--;
 
                 //return 0 since combination is complete.
                 return LengthFound;
