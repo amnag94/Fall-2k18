@@ -74,10 +74,17 @@ public class ArtWork {
         }while(continueGame.equalsIgnoreCase("yes"));
     }
 
+    /**
+     * creates a array to keep track of rows of picture which are already shown
+     */
     private void initialiseArtWorkToBeDisplayed() {
         displayedArtWorkIndexes = new int[artWorkPicture.size()];
     }
 
+    /**
+     *
+     * @returns a random word from the generated wordlist read from the file
+     */
     private String chooseRandomWordFromWordList() {
         return wordList.get(new Random().nextInt(wordList.size()));
     }
@@ -108,13 +115,21 @@ public class ArtWork {
         }
     }
 
+
+    /**
+     * recieves the word on which the entire game is to be played
+     * macthces the response given by the player and comapres it with the word
+     * based on the match decide if the user selected word or no
+     * @param wordToGuess
+     * @return  yes if the user wants to play the game again
+     */
     private String playGame(String wordToGuess) {
         Scanner scanner = new Scanner(System.in);
         int remainingGameAttempts = allowedAttempts;
         int [] guessedWordIndexes = new int[wordToGuess.length()];
         do {
             printGuessedString(wordToGuess, guessedWordIndexes);
-            System.out.print("Guess a letter : ");
+            System.out.print(allowedAttempts-remainingGameAttempts + " :Guess a letter : ");
             char guessedChar = scanner.next().charAt(0);
             if(playerGuessedCorrectChar(guessedChar,wordToGuess,guessedWordIndexes)){
                 if( playerGuessedEntireWord(guessedWordIndexes)){
@@ -128,7 +143,7 @@ public class ArtWork {
         }while (remainingGameAttempts > 0);
         displayArtWork(true);
         System.out.println("The word was : " + wordToGuess);
-        System.out.println("Do you want to continue? ");
+        System.out.println("Do you want to continue (yes/no)?");
         return scanner.next();
     }
 
@@ -185,6 +200,12 @@ public class ArtWork {
         System.out.println(stringBuilder.toString());
     }
 
+    /**
+     * starts the game by telling where to find the file which contains the words
+     * and also specifies the number of attempts that are allowed in the game
+     * @param args
+     * args[0] can contain the name of the file
+     */
     public static void main( String args[] ) {
         try {
             String fileName ;
@@ -194,7 +215,7 @@ public class ArtWork {
             else{
                 fileName = "wordList.txt";
             }
-            ArtWork artWork = new ArtWork(3,fileName);
+            ArtWork artWork = new ArtWork(9,fileName);
             if(artWork.initialiseGame()){
                 artWork.play();
             }
