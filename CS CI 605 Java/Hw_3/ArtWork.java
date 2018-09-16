@@ -1,107 +1,188 @@
+
+
+import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.Scanner;
+import java.io.IOException;
+import java.util.*;
 import java.io.File;
-import java.math.*;
 
 class ArtWork {
-    public static void main( String args[] ) {
+    private int allowedAttempts;
+    private String fileName ;
+    private List<String> wordList ;
+    private Vector<String> artWorkPicture;
+    private int [] displayedArtWorkIndexes;
+
+    public ArtWork(int attemptsCount, String fileName){
+        allowedAttempts = attemptsCount;
+        this.fileName = fileName;
+        artWorkPicture = readArtWorkFile();
+
+    }
+
+    private boolean initialiseGame() {
+        Scanner scanner = null;
         try {
-            Scanner scanner = new Scanner(System.in);
-            String filename = "patternWords.txt";//scanner.next();
-            File file = new File(filename);
-            Scanner fileScanner = new Scanner(file);
+            wordList = new ArrayList<>();
+            scanner = new Scanner(new FileReader(new File("").getCanonicalPath() + "/"+fileName));
+            while (scanner.hasNext()){
+                wordList.add(scanner.next());
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("please enter a correct file name");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally{
+        if(scanner != null){
+            scanner.close();
+            return  true;
+        }
+        else {
+            return false;
+        }
+        }
+    }
 
-            int roundCounter = 3;
-            while(roundCounter > 0) {
+    private void play() {
+        String continueGame;
+        do {
+            String wordToBeDisplayed = chooseRandomWordFromWordList();
+            System.out.println();
+            initialiseArtWorkToBeDisplayed();
+            continueGame = playGame(wordToBeDisplayed);
+        }while(continueGame.equalsIgnoreCase("yes"));
+    }
 
-                String fileLine = getRandomWord(fileScanner);
+    private void initialiseArtWorkToBeDisplayed() {
+        displayedArtWorkIndexes = new int[artWorkPicture.size()];
+    }
 
-                System.out.println();
-                //System.out.println(fileLine);
+    private String chooseRandomWordFromWordList() {
+        return wordList.get(new Random().nextInt(wordList.size()));
+    }
 
-                String continueGame = playGame(fileLine);
 
-                if(continueGame.equalsIgnoreCase("yes")) {
-                    roundCounter--;
-                }
-                else {
-                    System.out.println("Game Over");
+    private Vector<String> readArtWorkFile() {
+        Scanner scanner = null;
+        Vector<String> artWork = new Vector<>();
+        try {
+
+            scanner = new Scanner(new FileReader(new File("").getCanonicalPath() + "/pic.txt"));
+            while (scanner.hasNext()){
+                artWork.add(scanner.next());
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally{
+            if(scanner != null){
+                scanner.close();
+            }
+            return artWork;
+        }
+    }
+
+    private String playGame(String wordToGuess) {
+        Scanner scanner = new Scanner(System.in);
+        int remainingGameAttempts = allowedAttempts;
+        int [] guessedWordIndexes = new int[wordToGuess.length()];
+        do {
+            printGuessedString(wordToGuess, guessedWordIndexes);
+            System.out.print("Guess a letter : ");
+            char guessedChar = scanner.next().charAt(0);
+            if(playerGuessedCorrectChar(guessedChar,wordToGuess,guessedWordIndexes)){
+                if( playerGuessedEntireWord(guessedWordIndexes)){
                     break;
                 }
             }
+            else {
+                remainingGameAttempts--;
+            }
+            displayArtWork(false);
+        }while (remainingGameAttempts > 0);
+        displayArtWork(true);
+        System.out.println("The word was : " + wordToGuess);
+        System.out.println("Do you want to continue? ");
+        return scanner.next();
+    }
+
+    private boolean playerGuessedCorrectChar(char guessedChar,String wordToGuess,int [] guessedWordIndexes) {
+        int index = wordToGuess.indexOf(guessedChar);
+        boolean charGuessed = false;
+        while (index != -1){
+            charGuessed = true;
+            guessedWordIndexes[index]=1;
+            index = wordToGuess.indexOf(guessedChar,index+1);
+        }
+        return charGuessed;
+    }
+
+    private boolean playerGuessedEntireWord(int[] guessedWord) {
+        int guessedCounter = 0;
+        for(int guessedIndex = 0; guessedIndex < guessedWord.length; guessedIndex++) {
+            if(guessedWord[guessedIndex] == 1)
+                guessedCounter++;
+        }
+        return (guessedCounter == guessedWord.length);
+    }
+
+    public static void printGuessedString(String wordToBeDisplayed, int [] guessedCharIndexes)
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        int charIndex = 0;
+        while(charIndex < wordToBeDisplayed.length()) {
+            if(guessedCharIndexes[charIndex] == 1) {
+                stringBuilder.append(wordToBeDisplayed.charAt(charIndex) + " ");
+            }
+            else {
+                stringBuilder.append("_ ");
+            }
+            charIndex++;
+        }
+        System.out.println(stringBuilder.toString());
+    }
+
+    public static void main( String args[] ) {
+        try {
+            String fileName ;
+            if (args.length > 0){
+                fileName = args[0];
+            }
+            else{
+                fileName = "wordList.txt";
+            }
+            ArtWork artWork = new ArtWork(3,fileName);
+            if(artWork.initialiseGame()){
+                artWork.play();
+            }
 
         }
-        catch (Exception exc)
-        {
+        catch (Exception exc) {
             System.out.println(exc.toString());
         }
     }
-    public static String getRandomWord(Scanner fileScanner)
-    {
-        int randomVal = ((int) ((Math.random()) * 100) % 20) + 1;
-        int wordCtr = 0;
-        String fileLine = "";
-        while (fileScanner.hasNext()) {
-            fileLine = fileScanner.next();
 
-            wordCtr++;
-            if (wordCtr == randomVal)
-                break;
-            //System.out.println(fileLine);
+    private void displayArtWork(boolean showEntirePicture) {
+
+        Random random = new Random();
+        int rowsOfArtWorkToShowOnEachAttempt = artWorkPicture.size() / allowedAttempts;
+        while (rowsOfArtWorkToShowOnEachAttempt >= 0){
+            int randomNumber = random.nextInt(artWorkPicture.size());
+            displayedArtWorkIndexes[randomNumber] = 1;
+            rowsOfArtWorkToShowOnEachAttempt --;
         }
-        return fileLine;
-
-    }
-    public static String playGame(String fileLine)
-    {
-        int guessCounter = 3;
-        int [] guessedStatus = new int[fileLine.length()];
-        printString(fileLine, guessedStatus, (3 - guessCounter));
-        while (guessCounter > 0) {
-            System.out.print("Guess a letter : ");
-            Scanner guessScanner = new Scanner(System.in);
-            if (guessScanner.hasNext()) {
-                char guessChar = guessScanner.next().charAt(0);
-                int indexOfChar = fileLine.indexOf(guessChar);
-                if(indexOfChar >= 0) {
-                    guessedStatus[indexOfChar] = 1;
-                }
-                else {
-                    guessCounter--;
-                }
-                int guessedCounter = 0;
-                for(int guessedIndex = 0; guessedIndex < guessedStatus.length; guessedIndex++) {
-                    if(guessedStatus[guessedIndex] == 1)
-                        guessedCounter++;
-                }
-                if(guessedCounter == guessedStatus.length)
-                    break;
-                printString(fileLine, guessedStatus, (3 - guessCounter));
-            }
-        }
-
-        System.out.println("The word was : " + fileLine);
-        System.out.println("Do you want to continue? ");
-        Scanner gameCountScanner = new Scanner(System.in);
-
-        if(gameCountScanner.hasNext()) {
-            return gameCountScanner.next().toString();
-        }
-        return "no input";
-    }
-    public static void printString(String fileLine, int guessedStatus[], int counter)
-    {
-        System.out.println(counter + ": ");
-        int stringIndex = 0;
-        while(stringIndex < fileLine.length()) {
-            if(guessedStatus[stringIndex] == 1) {
-                System.out.print(fileLine.charAt(stringIndex) + " ");
+        for (int index = 0; index < artWorkPicture.size(); index++) {
+            if(displayedArtWorkIndexes[index]==1 || showEntirePicture){
+                System.out.println(artWorkPicture.get(index));
             }
             else {
-                System.out.print("_ ");
+                System.out.println();
             }
-            stringIndex++;
         }
-        System.out.println();
     }
+
+
 }
