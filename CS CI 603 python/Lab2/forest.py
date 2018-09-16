@@ -1,8 +1,18 @@
-from random import randint
+import random
 import math
 import turtle
 
+left_point = -400
+right_point = 400
 
+pine_leaf_length = 50
+maple_leaf_length = 25
+
+tree_types = ['maple', 'pine']
+tre_types_length = [150, 200]
+max_tree_height = 200
+
+available_wood = 0
 
 '''
 pre : (0,0), east, up
@@ -38,7 +48,8 @@ pre : (0,length), north, up
 
 
 def draw_pine_tree_top():
-    pine_leaf_length = 50
+
+
     t.left(90)
     t.fd(pine_leaf_length // 2)
     t.right(120)
@@ -55,7 +66,7 @@ pre : (0,length), north, up
 
 
 def draw_maple_tree_top():
-    maple_leaf_length = 25
+
     t.down()
     t.right(90)
     t.circle(maple_leaf_length)
@@ -93,25 +104,20 @@ def draw_tree(length, tree_type):
 
 
 def draw_picture_base():
-    t.speed(0)
     t.up()
-    t.setpos(-290,-290)
-    t.fd(580)
-    t.left(90)
-    t.fd(580)
-    t.left(90)
-    t.fd(580)
-    t.left(90)
-    t.fd(580)
-    t.left(90)
-    t.speed(6)
+    t.speed(0)
+    t.setpos(left_point + 10,left_point + 50)
+    t.down()
+    t.fd(right_point - left_point - 20)
+    t.bk(right_point - left_point - 50)
+    #t.speed(6)
+    t.up()
 
 
 def initialise_screen():
     turtle.setup(width=1200, height=800, startx=0, starty=0)
-    left_point = -400
-    right_point = 400
     turtle.setworldcoordinates(left_point,left_point,right_point,right_point)
+
 
 
 '''
@@ -122,6 +128,10 @@ pre pos are same
 def draw_square(length):
     t.down()
     for _ in range(4):
+        if _ == 2:
+            t.up()
+        else:
+            t.down()
         t.fd(length)
         t.left(90)
     t.fd(length)
@@ -149,7 +159,7 @@ def draw_house(wall_height):
 
 
 def draw_star(sky_height):
-    star_size = 10
+    star_size = 20
     t.left(90)
     t.fd(sky_height)
     t.down()
@@ -166,28 +176,45 @@ def draw_star(sky_height):
     t.left(90)
 
 
+def get_drawing_sequence(noOfTrees, house):
+    if house == 'n':
+        return ['tree'] * noOfTrees
+    draw_sequence = ['tree'] * (noOfTrees-2)
+    draw_sequence.append('house')
+    random.shuffle(draw_sequence)
+    return ['tree']+ draw_sequence + ['tree']
+
+
+def calculate_wall_height(available_wood):
+    pass
+
+
+
 if __name__ == '__main__':
     t = turtle.Turtle()
     t.up()
     initialise_screen()
     draw_picture_base()
-    treeTypes = ['maple','pine']
-    treeTypesLength = [150,200]
-    maxTreeHeight = 200
 
     #noOfTrees = int(input("How many trees in your forest? "))
     noOfTrees = 5
-    for _ in range(noOfTrees):
-        tree_height  = draw_tree(randint(50, treeTypesLength[randint(0,1)]), treeTypes[randint(0,1)])
-        if(tree_height > maxTreeHeight):
-            maxTreeHeight = tree_height
-        t.fd(100)
-
     #house =  input("Is there a house in the forest (y/n)? ")
     house = 'y'
-    if house == 'y':
-        draw_house(100)
+    draw_sequence = get_drawing_sequence(noOfTrees,house)
 
-    draw_star(maxTreeHeight + 80)
+    for _ in draw_sequence:
+        if _ == 'tree':
+            tree_height  = draw_tree(random.randint(50, tre_types_length[random.randint(0, 1)]), tree_types[random.randint(0, 1)])
+            available_wood = available_wood + tree_height
+            if tree_height > max_tree_height:
+                max_tree_height = tree_height
+        else:
+            draw_house(100)
+        t.fd(100)
+    t.bk(100)
+    draw_star(max_tree_height + 80)
+    print("Night is done, press enter for the day")
+    print("We have {0} units of lumber for building".format(available_wood))
+    calculate_wall_height(available_wood)
         
     turtle.done()
