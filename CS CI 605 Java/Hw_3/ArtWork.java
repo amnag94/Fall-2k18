@@ -6,13 +6,24 @@ import java.io.IOException;
 import java.util.*;
 import java.io.File;
 
-class ArtWork {
+/**
+ * this program is a game, where in a user has to guess a  given word, you get 9 attempts to guess the word
+ * @author ameya nagnur
+ * @author ketan kokane
+ */
+
+public class ArtWork {
     private int allowedAttempts;
     private String fileName ;
     private List<String> wordList ;
     private Vector<String> artWorkPicture;
     private int [] displayedArtWorkIndexes;
 
+    /**
+     * constructor to initialise attempts count and file name of the file to fetch words from
+     * @param attemptsCount
+     * @param fileName
+     */
     public ArtWork(int attemptsCount, String fileName){
         allowedAttempts = attemptsCount;
         this.fileName = fileName;
@@ -20,6 +31,10 @@ class ArtWork {
 
     }
 
+    /**
+     * reads the words from the file and stores it in a list
+     * @return false if the file is not found, else return true
+     */
     private boolean initialiseGame() {
         Scanner scanner = null;
         try {
@@ -44,6 +59,11 @@ class ArtWork {
         }
     }
 
+    /**
+     * is the main driver function of the class, which reads a rondom word from the created wordList, displays to the user
+     * and waits for the user's reply, once user types the guessed letter, checks if the correct char was entered or not.
+     * also Initialises the Artwork that is to be displayed when the user enters the a letter
+     */
     private void play() {
         String continueGame;
         do {
@@ -62,7 +82,10 @@ class ArtWork {
         return wordList.get(new Random().nextInt(wordList.size()));
     }
 
-
+    /**
+     * reads the artwork file and return array representation of it
+     * @return
+     */
     private Vector<String> readArtWorkFile() {
         Scanner scanner = null;
         Vector<String> artWork = new Vector<>();
@@ -109,6 +132,14 @@ class ArtWork {
         return scanner.next();
     }
 
+    /**
+     * checks if the letter entered by the user is correct or not
+     * if its correct finds all the instances of the letter in the word and displays it to the user
+     * @param guessedChar
+     * @param wordToGuess
+     * @param guessedWordIndexes
+     * @return
+     */
     private boolean playerGuessedCorrectChar(char guessedChar,String wordToGuess,int [] guessedWordIndexes) {
         int index = wordToGuess.indexOf(guessedChar);
         boolean charGuessed = false;
@@ -120,6 +151,9 @@ class ArtWork {
         return charGuessed;
     }
 
+    /*
+    checks if the player before all the attempts are done, has guessed the word or not
+     */
     private boolean playerGuessedEntireWord(int[] guessedWord) {
         int guessedCounter = 0;
         for(int guessedIndex = 0; guessedIndex < guessedWord.length; guessedIndex++) {
@@ -129,6 +163,12 @@ class ArtWork {
         return (guessedCounter == guessedWord.length);
     }
 
+    /**
+     * helper function to print the word that is to be guessed, but if the user has already guessed letter of the words then that
+     * letters needs to be displayed to the user
+     * @param wordToBeDisplayed
+     * @param guessedCharIndexes
+     */
     public static void printGuessedString(String wordToBeDisplayed, int [] guessedCharIndexes)
     {
         StringBuilder stringBuilder = new StringBuilder();
@@ -165,6 +205,12 @@ class ArtWork {
         }
     }
 
+    /**
+     * heler function to display the art work to the user,
+     * uses the array representation of the artwork and randomly shows the few lines of the image at each attempt
+     * to keep the row shown at every instance, uses the array to store the row which are already shown
+     * @param showEntirePicture
+     */
     private void displayArtWork(boolean showEntirePicture) {
 
         Random random = new Random();
